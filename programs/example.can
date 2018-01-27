@@ -1,0 +1,30 @@
+[export]
+
+
+	### Common Operators ###
+
+	[namespace common]
+
+		pair ( a, b ) : { { a }, { a, b } }
+		left ( p ) : {  }
+
+		union        : ∪
+		intersection : ∩
+		difference   : \
+		compliement  : \
+		powerset     : ℙ
+
+	[/namespace]
+
+	[namespace mathematics]
+
+		a(n) : #(a) + 2
+
+	[/namespace]
+
+	### 
+	Another
+	Comment 
+	Block ###
+
+[/export]
