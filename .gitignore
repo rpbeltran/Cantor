@@ -1,5 +1,12 @@
 
+
+# Temporary Caches
+
 /ply/__pycache__/
+
+
+# Parser Outputs
 
 */parser.out
 */parsetab.py
+
