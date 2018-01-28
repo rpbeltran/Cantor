@@ -1,3 +1,7 @@
+
+
+[using] common [/using]
+
 [export]
 
 
@@ -6,13 +10,17 @@
 	[namespace common]
 
 		pair ( a, b ) : { { a }, { a, b } }
-		left ( p ) : {  }
+
+		###left ( p ) : {  }###
 
 		union        : ∪
 		intersection : ∩
 		difference   : \
-		compliement  : \
+		complement   : \
 		powerset     : ℙ
+
+
+		c(a, b) : a + b
 
 	[/namespace]
 
@@ -28,3 +36,7 @@
 	Block ###
 
 [/export]
+
+
+
+union(  )

@@ -24,27 +24,27 @@
     nor  ( a, b ) : not( or ( a, b) )
     nxor ( a, b ) : not( xor( a, b) )
 
-[\namespace]
+[/namespace]
 
 
 ### Printer Replacements ###
 
 [pretty_printer]
 
-    ### Print Boolean Primitives by name instead of set ##
+    ### Print Boolean Primitives by name instead of set ###
 
-    [replace True] booleans::true [\replace]
-    [replace False] booleans::false [\replace]
+    [replace True] booleans::true [/replace]
+    [replace False] booleans::false [/replace]
 
-    ### Query for True xor False
+    ### Query for True xor False ###
 
     [query true_nxor_false]
 
         booleans::nxor( booleans::true, booleans::false )
 
-    [\query]
+    [/query]
 
-[\pretty_printer]
+[/pretty_printer]
 
 
 ### Console Output:

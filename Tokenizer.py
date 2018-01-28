@@ -21,7 +21,7 @@ class CTokenizer:
         'IDENTIFIER',
 
         # XML Tags
-        'STARTTAG', 'ENDTAG',
+        'STARTOPENTAG', 'STARTCLOSETAG', 'ENDTAG',
 
         # Algorithmic Operators
         'SUCHTHAT', 'DENOTES', 
@@ -29,50 +29,49 @@ class CTokenizer:
         'COMMENT',
 
         # Set Operators
-        'UNION', 'INTERSECTION', 'COMPLIMENT', 'POWERSET', 
-        'CARDINALITY',
-
+        'UNION', 'INTERSECTION', 'COMPLEMENT', 'POWERSET', 
+        
         # Urelemental Operators
         'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 
-        'GT', 'LT', 'GE', 'LE',
+        'GT', 'LT', 'GE', 'LE', 'CARDINALITY', 
 
         # Joint Operators
         'EQUALS'
 
     )
 
-
     # ----------------------------
     #  - - - Basic Patterns - - -
     # ----------------------------
 
-    t_STARTSET     = r'\{'
-    t_ENDSET       = r'\}'
-    t_EMPTYSET     = r'ø|Ø'
-    t_IDENTIFIER   = r'[\w_][\w\d_]*(\.[\w_][\w\d_]*)*'
-    t_STARTTAG     = r'\['
-    t_ENDTAG       = r'\]'
-    t_SUCHTHAT     = r'\|'
-    t_DENOTES      = r':'
-    t_LPAREN       = r'\('
-    t_RPAREN       = r'\)'
-    t_COMMA        = r','
-    t_COMMENT      = r'(\#{3})(([^\#])|(\#\#?[^\#]))*(\#{3})\#*'
-    t_UNION        = r'∪'
-    t_INTERSECTION = r'∩'
-    t_COMPLIMENT   = r'\\'
-    t_POWERSET     = r'ℙ'
-    t_CARDINALITY  = r'\#'
-    t_PLUS         = r'\+'
-    t_MINUS        = r'-'
-    t_TIMES        = r'\*'
-    t_DIVIDE       = r'/'
-    t_GT           = r'>'
-    t_LT           = r'<'
-    t_GE           = r'≥'
-    t_LE           = r'≤'
-    t_EQUALS       = r'=(=)?'
-    t_ignore       = ' \t'
+    t_STARTSET      = r'\{'
+    t_ENDSET        = r'\}'
+    t_EMPTYSET      = r'ø|Ø'
+    t_IDENTIFIER    = r'[a-zA-Z_]\w*(::[a-zA-Z_]\w*)*'
+    t_STARTOPENTAG  = r'\['
+    t_STARTCLOSETAG = r'\[ *\/'
+    t_ENDTAG        = r'\]'
+    t_SUCHTHAT      = r'\|'
+    t_DENOTES       = r':'
+    t_LPAREN        = r'\('
+    t_RPAREN        = r'\)'
+    t_COMMA         = r','
+    t_COMMENT       = r'(\#{3})(([^\#])|(\#\#?[^\#]))*(\#{3})\#*'
+    t_UNION         = r'∪'
+    t_INTERSECTION  = r'∩'
+    t_COMPLEMENT    = r'\\'
+    t_POWERSET      = r'ℙ'
+    t_CARDINALITY   = r'\#'
+    t_PLUS          = r'\+'
+    t_MINUS         = r'-'
+    t_TIMES         = r'\*'
+    t_DIVIDE        = r'/'
+    t_GT            = r'>'
+    t_LT            = r'<'
+    t_GE            = r'≥'
+    t_LE            = r'≤'
+    t_EQUALS        = r'=(=)?'
+    t_ignore        = ' \t'
 
 
     # -----------------------------
@@ -82,6 +81,7 @@ class CTokenizer:
     def t_INTEGER( self, t ):
         r'\d+'
         t.value = int( t.value )
+        return t
 
 
     # ----------------------
@@ -93,7 +93,7 @@ class CTokenizer:
         t.lexer.lineno += len(t.value)
 
     def t_error(self, t):
-        print("Illegal character '%s'" % t.value[0])
+        print( "Illegal character in line %i : '%s'" % ( t.lexer.lineno, t.value[0] ) ) 
         t.lexer.skip(1)
 
 
@@ -105,7 +105,7 @@ class CTokenizer:
 
     def __init__ ( self ):
 
-        self.build()
+        self.build( )
 
     # Build the lexer
 
@@ -115,11 +115,17 @@ class CTokenizer:
 
     # Tokenize files
 
+    def input(self, data):
+        return self.lex.input(str(data))
+
+    def token(self):
+        return self.lex.token()
+
     def tokenize( self, filename ):
         
         with open( filename, "r" ) as file:
 
-            self.lex.input( str( file.read() ) )
+            self.input( str( file.read() ) )
             
             tokens = []
             while True:

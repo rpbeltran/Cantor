@@ -1,44 +1,65 @@
 
-tokens = (
-    'NAME','NUMBER',
-    'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
-    'LPAREN','RPAREN',
-)
-
-# Tokens
-
-t_PLUS    = r'\+'
-t_MINUS   = r'-'
-t_TIMES   = r'\*'
-t_DIVIDE  = r'/'
-t_EQUALS  = r'='
-t_LPAREN  = r'\('
-t_RPAREN  = r'\)'
-t_NAME    = r'[\w_][\w\d_]*'
-
-def t_NUMBER(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
-
-# Ignored characters
-t_ignore = " \t"
-
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += t.value.count("\n")
-
-def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
-
-# Build the lexer
 import ply.lex as lex
-lex.lex()
+
+class TOK:
+    tokens = (
+        'NAME','NUMBER',
+        'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
+        'LPAREN','RPAREN',
+    )
+
+    # Tokens
+
+    t_PLUS    = r'\+'
+    t_MINUS   = r'-'
+    t_TIMES   = r'\*'
+    t_DIVIDE  = r'/'
+    t_EQUALS  = r'='
+    t_LPAREN  = r'\('
+    t_RPAREN  = r'\)'
+    t_NAME    = r'[\w_][\w\d_]*'
+
+    def t_NUMBER(self,t):
+        r'\d+'
+        t.value = int(t.value)
+        return t
+
+    # Ignored characters
+    t_ignore = " \t"
+
+    def t_newline(self,t):
+        r'\n+'
+        t.lexer.lineno += t.value.count("\n")
+
+    def t_error(self,t):
+        print("Illegal character '%s'" % t.value[0])
+        t.lexer.skip(1)
+
+    # -------------------
+    #  - - - Lexer - - -
+    # -------------------
+
+    # Constructor
+
+    def __init__ ( self ):
+
+        self.build( )
+
+    # Build the lexer
+
+    def build(self,**kwargs):
+        
+        self.lex = lex.lex(module=self, **kwargs)
+
+    # Tokenize files
+
+    def input(self, data
+        self.lex.input(data)
 
 
 
-
+tokens = TOK.tokens
+tok = TOK()
 
 # Precedence rules for the arithmetic operators
 precedence = (
@@ -63,10 +84,10 @@ def p_expression_binop(p):
                   | expression MINUS expression
                   | expression TIMES expression
                   | expression DIVIDE expression'''
-    if p[2] == '+'  : p[0] = p[1] + p[3]
-    elif p[2] == '-': p[0] = p[1] - p[3]
-    elif p[2] == '*': p[0] = p[1] * p[3]
-    elif p[2] == '/': p[0] = p[1] / p[3]
+    if   p[2] == '+' : p[0] = p[1] + p[3]
+    elif p[2] == '-' : p[0] = p[1] - p[3]
+    elif p[2] == '*' : p[0] = p[1] * p[3]
+    elif p[2] == '/' : p[0] = p[1] / p[3]
 
 def p_expression_uminus(p):
     'expression : MINUS expression %prec UMINUS'
